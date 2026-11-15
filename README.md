@@ -12,55 +12,53 @@ Below is the visual flow of the multi-agent pipeline:
 
 ```mermaid
 graph TD
-    %% Define Nodes
-    Topic["You give a Research Topic"]
+    %% Define color styles
+    classDef green fill:#2ea44f,stroke:#1e6a35,color:#fff,font-weight:bold;
+    classDef purple fill:#8a63d2,stroke:#5c3a9e,color:#fff,font-weight:bold;
+    classDef peach fill:#ffa04d,stroke:#cc6e19,color:#1e1e24,font-weight:bold;
+    classDef red fill:#ff5b8e,stroke:#c42556,color:#fff,font-weight:bold;
+    classDef grey fill:#4b5263,stroke:#343a40,color:#fff,font-weight:bold;
+
+    %% Nodes and relationships
+    Topic["You give a Research Topic"]:::green
     
-    SearchAgent["First Agent<br>Search Agent<br>(AgentExecutor + web_search_tool)"]
-    Tool1["Tool 1<br>Tavily API - Live web results"]
-    State1["state['search result'] saved"]
+    SearchAgent["First Agent<br>Search Agent<br>(AgentExecutor + web_search_tool)"]:::purple
+    Tavily["Tool 1<br>Tavily API - Live web results"]:::red
     
-    ReaderAgent["Second Agent<br>Reader Agent<br>(AgentExecutor + scrape_url_tool)"]
-    Tool2["Tool 2<br>BeautifulSoup page content"]
-    State2["state['scraped content'] saved"]
+    SearchSaved["state['search result'] saved"]:::peach
     
-    WriterChain["Writer chain"]
-    CriticChain["Critic chain"]
+    ReaderAgent["Second Agent<br>Reader Agent<br>(AgentExecutor + scrape_url_tool)"]:::purple
+    Scraper["Tool 2<br>BeautifulSoup page content"]:::red
     
-    Final["Final output"]
+    ScrapedSaved["state['scraped content'] saved"]:::peach
     
-    %% Connections
+    WriterChain["Writer chain"]:::grey
+    CriticChain["Critic chain"]:::grey
+    
+    FinalOutput["Final output"]:::green
+
+    %% Process flow
     Topic --> SearchAgent
     
-    SearchAgent -->|Fetching real time data| Tool1
-    Tool1 --> SearchAgent
+    %% Interactive side-loops with tools
+    SearchAgent -->|Fetching real time data| Tavily
+    Tavily --> SearchAgent
     
-    SearchAgent --> State1
-    State1 --> ReaderAgent
+    SearchAgent --> SearchSaved
+    SearchSaved --> ReaderAgent
     
-    ReaderAgent -->|Fetching more information| Tool2
-    Tool2 --> ReaderAgent
+    ReaderAgent -->|Fetching more information| Scraper
+    Scraper --> ReaderAgent
     
-    ReaderAgent --> State2
+    ReaderAgent --> ScrapedSaved
     
-    State2 --> WriterChain
+    %% Parallel branches
+    ScrapedSaved --> WriterChain
+    ScrapedSaved --> CriticChain
     
-    %% Writer and Critic Feedback Loop
-    WriterChain --> CriticChain
-    CriticChain --> WriterChain
-    
-    WriterChain --> Final
-    
-    %% Styling to match the original diagram colors
-    style Topic fill:#82e0aa,stroke:#333,stroke-width:2px,color:#000
-    style SearchAgent fill:#d7bde2,stroke:#333,stroke-width:2px,color:#000
-    style Tool1 fill:#f5b7b1,stroke:#333,stroke-width:2px,color:#000
-    style State1 fill:#fad7a1,stroke:#333,stroke-width:2px,color:#000
-    style ReaderAgent fill:#d7bde2,stroke:#333,stroke-width:2px,color:#000
-    style Tool2 fill:#f5b7b1,stroke:#333,stroke-width:2px,color:#000
-    style State2 fill:#fad7a1,stroke:#333,stroke-width:2px,color:#000
-    style WriterChain fill:#d5d8dc,stroke:#333,stroke-width:2px,color:#000
-    style CriticChain fill:#d5d8dc,stroke:#333,stroke-width:2px,color:#000
-    style Final fill:#82e0aa,stroke:#333,stroke-width:2px,color:#000
+    %% Final output convergence
+    WriterChain --> FinalOutput
+    CriticChain --> FinalOutput
 ```
 
 ### Pipeline Breakdown
