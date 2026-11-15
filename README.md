@@ -11,22 +11,23 @@ The system leverages Large Language Models (LLMs) connected through LangChain's 
 Below is the visual flow of the multi-agent pipeline:
 
 ```mermaid
-graph TD
-    %% Define Nodes (Main spine defined before Tools to keep Tools on the right)
-    Topic["<b>You give a Research Topic</b>"]
+%%{init: {'flowchart': {'wrappingWidth': 400, 'htmlLabels': true}}}%%
+flowchart TD
+    %% Define Nodes (Clean text + extra padding spaces so boxes never clip text)
+    Topic["&nbsp;&nbsp;You give a Research Topic&nbsp;&nbsp;"]
     
-    SearchAgent["First Agent<br><b>Search Agent</b><br>(AgentExecutor + web_search_tool)"]
-    State1["<b>state['search result'] saved</b>"]
-    Tool1["Tool 1<br><b>Tavily API - Live web results</b>"]
+    SearchAgent["First Agent<br/>Search Agent<br/>(AgentExecutor +<br/>web_search_tool)"]
+    State1["&nbsp;&nbsp;state['search result'] saved&nbsp;&nbsp;"]
+    Tool1["Tool 1<br/>Tavily API - Live<br/>web results"]
     
-    ReaderAgent["Second Agent<br><b>Reader Agent</b><br>(AgentExecutor + scrape_url_tool)"]
-    State2["<b>state['scraped content'] saved</b>"]
-    Tool2["Tool 2<br><b>BeautifulSoup page content</b>"]
+    ReaderAgent["Second Agent<br/>Reader Agent<br/>(AgentExecutor +<br/>scrape_url_tool)"]
+    State2["&nbsp;&nbsp;state['scraped content'] saved&nbsp;&nbsp;"]
+    Tool2["Tool 2<br/>BeautifulSoup<br/>page content"]
     
-    WriterChain["<b>Writer chain</b>"]
-    CriticChain["<b>Critic chain</b>"]
+    WriterChain["&nbsp;&nbsp;Writer chain&nbsp;&nbsp;"]
+    CriticChain["&nbsp;&nbsp;Critic chain&nbsp;&nbsp;"]
     
-    Final["<b>Final output</b>"]
+    Final["&nbsp;&nbsp;Final output&nbsp;&nbsp;"]
     
     %% Connections (Main flow declared first so Tools branch to the right)
     Topic --> SearchAgent
@@ -48,17 +49,18 @@ graph TD
     WriterChain --> Final
     CriticChain --> Final
     
-    %% Pastel Styling
-    style Topic fill:#82e0aa,stroke:#27ae60,stroke-width:2px,color:#000
-    style SearchAgent fill:#d7bde2,stroke:#8e44ad,stroke-width:2px,color:#000
-    style Tool1 fill:#f5b7b1,stroke:#c0392b,stroke-width:2px,color:#000
-    style State1 fill:#fad7a1,stroke:#d68910,stroke-width:2px,color:#000
-    style ReaderAgent fill:#d7bde2,stroke:#8e44ad,stroke-width:2px,color:#000
-    style Tool2 fill:#f5b7b1,stroke:#c0392b,stroke-width:2px,color:#000
-    style State2 fill:#fad7a1,stroke:#d68910,stroke-width:2px,color:#000
-    style WriterChain fill:#d5d8dc,stroke:#566573,stroke-width:2px,color:#000
-    style CriticChain fill:#d5d8dc,stroke:#566573,stroke-width:2px,color:#000
-    style Final fill:#82e0aa,stroke:#27ae60,stroke-width:2px,color:#000
+    %% Custom Pastel Palette Styling
+    %% Green (#D0F4DE), Purple (#E4C1F9), Pink (#FF99C8), Yellow (#FCF6BD), Blue (#A9DEF9)
+    style Topic fill:#D0F4DE,stroke:#7bc49a,stroke-width:2px,color:#000
+    style SearchAgent fill:#E4C1F9,stroke:#a87bc7,stroke-width:2px,color:#000
+    style Tool1 fill:#FF99C8,stroke:#d45b92,stroke-width:2px,color:#000
+    style State1 fill:#FCF6BD,stroke:#d4c86a,stroke-width:2px,color:#000
+    style ReaderAgent fill:#E4C1F9,stroke:#a87bc7,stroke-width:2px,color:#000
+    style Tool2 fill:#FF99C8,stroke:#d45b92,stroke-width:2px,color:#000
+    style State2 fill:#FCF6BD,stroke:#d4c86a,stroke-width:2px,color:#000
+    style WriterChain fill:#A9DEF9,stroke:#62a8cc,stroke-width:2px,color:#000
+    style CriticChain fill:#A9DEF9,stroke:#62a8cc,stroke-width:2px,color:#000
+    style Final fill:#D0F4DE,stroke:#7bc49a,stroke-width:2px,color:#000
 ```
 
 ### Pipeline Breakdown
@@ -72,15 +74,21 @@ The pipeline consists of four specialized agents/chains working in a continuous 
 #### 2. Search Agent (First Agent)
 
 * **Role:** Goes out on the live internet to find the most relevant and recent sources.
+
 * **Components:** `AgentExecutor` + `web_search_tool`
+
 * **Tools Used:** **Tavily API** (Fetches real-time, live web results).
+
 * **State Update:** The findings are saved to `state['search result']`.
 
 #### 3. Reader Agent (Second Agent)
 
 * **Role:** Dives deep into the sources found by the Search Agent, scraping and extracting meaningful content.
+
 * **Components:** `AgentExecutor` + `scrape_url_tool`
+
 * **Tools Used:** **BeautifulSoup** (Scrapes webpage content).
+
 * **State Update:** The extracted data is saved to `state['scraped content']`.
 
 #### 4. Writer Chain
@@ -98,7 +106,11 @@ The pipeline consists of four specialized agents/chains working in a continuous 
 ## Tech Stack
 
 * **Framework:** LangChain (LCEL Pipeline)
+
 * **Core:** Large Language Models (LLMs)
+
 * **Search Integration:** Tavily API
+
 * **Web Scraping:** BeautifulSoup
+
 * **Architecture:** State-driven shared memory system
