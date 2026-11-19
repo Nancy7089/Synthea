@@ -34,6 +34,6 @@ def scrape_url(url: str) -> str:
     except requests.RequestException as e:
         return f"Could not scrape URL: {str(e)}"
 
-print(web_search.invoke("What are the recent news updates about AI?"))
-print(scrape_url.invoke("https://www.hindustantimes.com/"))
+# print(web_search.invoke("What are the recent news updates about AI?"))
+# print(scrape_url.invoke("https://www.hindustantimes.com/"))
 

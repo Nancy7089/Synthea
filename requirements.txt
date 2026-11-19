@@ -2,6 +2,8 @@
 langchain>=1.5.0
 langchain-core>=1.8.0
 langchain-openai>=1.8.0
+langchain-groq>=1.2.0
+groq>=1.7.0
 langgraph>=1.0.0
 langchain-text-splitters>=1.0.0
 
