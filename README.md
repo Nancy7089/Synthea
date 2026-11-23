@@ -102,6 +102,7 @@ The pipeline consists of four specialized agents/chains working in a continuous 
 #### 6. The Output
 
 * **Final Delivery:** Both the Writer Chain and Critic Chain converge to produce a polished, comprehensive **Final output**.
+  
 
 ## Tech Stack
 
